@@ -5,16 +5,16 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-red.svg)](https://fastapi.tiangolo.com)
 [![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://docker.com)
 
-> 基於 OpenAI GPT-4 的智慧防災問答系統，整合第六河川分署防災資料平台，提供專業的防災資訊查詢與分析服務。
+> 基於 OpenAI GPT-4.1-mini 的智慧防災問答系統，整合第六河川分署防災資料平台，提供專業的防災資訊查詢與分析服務。
 
 ## 🎯 專案特色
 
-- 🤖 **智慧問答**: 基於 OpenAI GPT-4 的自然語言理解
+- 🤖 **智慧問答**: 基於 OpenAI GPT-4.1-mini 的自然語言理解
 - 🔧 **增強型工具**: 15個專業防災工具，支援智慧分析和結構化回應  
 - 💬 **多輪對話**: Redis 支援的持續對話記憶功能
 - 🛡️ **安全機制**: 多層輸入驗證和安全防護
 - 🐋 **容器化部署**: 完整的 Docker 開發和生產環境
-- 📊 **專業分析**: 縣市統計、警戒分析、趨勢預測
+- 📊 **專業分析**: 縣市統計、警戒分析、歷線分析
 
 ## 🏗️ 系統架構
 
