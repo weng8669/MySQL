@@ -21,27 +21,29 @@
 ```mermaid
 graph TB
     User[👤 使用者] --> API[🌐 FastAPI 後端]
-    API --> Agent[🤖 AI Agent<br/>OpenAI GPT-4]
+    API --> Semantic[🔍 語意理解<br/>意圖分析]
+    Semantic --> Validator[🛡️ 輸入驗證器<br/>安全檢查]
+    Validator --> Agent[🤖 AI Agent<br/>OpenAI GPT-4]
+    Validator --> Redis[(🗄️ Redis<br/>對話記憶)]
     Agent --> Registry[🔧 工具註冊器<br/>Tool Registry]
-    
-    Registry --> BasicTools[📦 基礎工具<br/>13個 API 工具]
-    Registry --> EnhancedTools[⚡ 增強型工具<br/>2個智慧分析工具]
-    
-    BasicTools --> ExternalAPI[🌍 外部 API<br/>WRA06 防災平台]
-    
-    EnhancedTools --> DataProcessor[🧮 資料處理器<br/>DataProcessor]
-    EnhancedTools --> TemplateManager[📋 模板管理器<br/>ResponseTemplate]
-    
+
+    Registry --> EnhancedTools[⚡ API 工具<br/>15個智慧分析工具]    
+    EnhancedTools --> ExternalAPI[🌍 Daas Common API<br/>WRA06 六分署平台]
+
+    ExternalAPI --> DataProcessor[🧮 資料處理器<br/>DataProcessor]
     DataProcessor --> Analysis[📊 智慧分析<br/>統計/警戒/趨勢]
+
+    Analysis --> TemplateManager[📋 模板管理器<br/>ResponseTemplate]
     TemplateManager --> Response[📄 結構化回應<br/>專業格式化]
-    
-    API --> Redis[(🗄️ Redis<br/>對話記憶)]
-    API --> Validator[🛡️ 輸入驗證器<br/>安全檢查]
+
+    Response --> Confidence[🎯 信心度判斷<br/>ConfidenceCheck]
+    Confidence --> Result[👤 使用者]
     
     style Agent fill:#e1f5fe
+    style Semantic fill:#fff8e1
     style EnhancedTools fill:#f3e5f5
-    style Analysis fill:#e8f5e8
-    style Response fill:#fff3e0
+    style DataProcessor fill:#e8f5e8
+    style TemplateManager fill:#fff3e0
 ```
 
 ## 🔄 資料流程
@@ -58,6 +60,7 @@ sequenceDiagram
     participant TM as 模板管理器
     participant EXT as 外部 API
     participant Redis as Redis 快取
+    participant C as 信心度判斷
 
     U->>API: 防災查詢請求
     API->>V: 輸入安全驗證
@@ -68,9 +71,9 @@ sequenceDiagram
     
     API->>A: 處理查詢 + 上下文
     A->>R: 選擇適當工具
-    R-->>A: 返回增強型工具
+    R-->>A: 返回資料工具
     
-    A->>ET: 執行增強分析
+    A->>ET: 執行資料分析
     ET->>EXT: API 資料獲取
     EXT-->>ET: 原始資料
     
@@ -80,7 +83,9 @@ sequenceDiagram
     ET->>TM: 專業模板渲染
     TM-->>ET: 格式化回應
     
-    ET-->>A: 增強分析結果
+    ET-->>A: 資料分析結果
+    A->>C: 信心度評估
+    C-->>A: 信心度結果
     A-->>API: 專業回應
     
     API->>Redis: 儲存對話記錄
@@ -271,6 +276,7 @@ wra06-ai-agent-2/
 │   ├── utils/                  # 工具程式
 │   └── validators/             # 安全驗證器
 ├── docs/                       # 📚 完整技術文件
+│   ├── technical_architecture_deep_dive.md # 🧠 技術架構深度解析
 │   ├── technical_guide.md      # 🔧 技術架構指南
 │   ├── enhanced_tools_architecture.md # ⚡ 增強型工具系統
 │   ├── conversation_feature_guide.md  # 💬 多輪對話功能
@@ -284,6 +290,7 @@ wra06-ai-agent-2/
 
 ## 📚 完整技術文件
 
+- **[🧠 技術架構深度解析](docs/technical_architecture_deep_dive.md)** - 語意理解、Redis、信心度計算完整技術流程
 - **[🔧 技術架構指南](docs/technical_guide.md)** - 系統架構、JWT認證、工具系統詳解
 - **[⚡ 增強型工具系統](docs/enhanced_tools_architecture.md)** - 智慧分析工具架構和開發指南  
 - **[💬 多輪對話功能](docs/conversation_feature_guide.md)** - Redis 對話記憶和使用指南
